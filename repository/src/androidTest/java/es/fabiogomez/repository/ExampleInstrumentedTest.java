@@ -1,4 +1,4 @@
-package es.fabiogomez.domain;
+package es.fabiogomez.repository;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("es.fabiogomez.domain.test", appContext.getPackageName());
+        assertEquals("es.fabiogomez.repository.test", appContext.getPackageName());
     }
 }

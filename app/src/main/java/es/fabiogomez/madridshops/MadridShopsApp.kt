@@ -3,7 +3,7 @@ package es.fabiogomez.madridshops
 import android.support.multidex.MultiDexApplication
 import android.util.Log
 import es.fabiogomez.domain.interactor.ErrorCompletion
-import es.fabiogomez.domain.interactor.GetAllShopsInteractorFakeImpl
+import es.fabiogomez.domain.interactor.getallshops.GetAllShopsInteractorFakeImpl
 import es.fabiogomez.domain.interactor.SuccessCompletion
 import es.fabiogomez.domain.model.Shops
 
@@ -18,6 +18,11 @@ class MadridShopsApp: MultiDexApplication() {
         Log.d("App", "onCreate JARL")
 
         val allShopsInteractor = GetAllShopsInteractorFakeImpl()
+
+        allShopsInteractor.execute(
+                success = { shops: Shops -> },
+                error = { msg:String -> Unit }
+                )
 
         allShopsInteractor.execute(
         success = object : SuccessCompletion<Shops>{
