@@ -6,20 +6,24 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import es.fabiogomez.repository.ErrorCompletion
+import es.fabiogomez.repository.SuccessCompletion
+import java.lang.ref.WeakReference
 
-class GetJsonManagerVolleyImpl: GetJsonManager {
+class GetJsonManagerVolleyImpl (context: Context): GetJsonManager {
 
-     var context: Context? = null
-     var requestQueue: RequestQueue? = null
+     var weakContext: WeakReference<Context> = WeakReference(context)     // Referencia débil para evitar leaks de memoria por el ciclo siguiente, dada una actividad que inicia la descarga se produce el siguente grafo
+     var requestQueue: RequestQueue? = null                               // Activity (strong)--> Interactor (strong)--> Repository (strong)--> Volley (weak)~~> Activity (el padre)
 
-     override fun execute(url: String, ) {
+     override fun execute(url: String, success: SuccessCompletion<String>, error: ErrorCompletion) {
 
          // create request ( success, failure)
         var request = StringRequest(url,
             Response.Listener {
-                Log.d("JSON", it)               // Bloque de success
+                Log.d("JSON", it)                           // Bloque de success
+                success.successCompletion(it)
             }, Response.ErrorListener {
-                it.localizedMessage                 // Bloque de error
+                error.errorCompletion(it.localizedMessage)      // Bloque de error
             })
 
          // add request to queue
@@ -31,7 +35,7 @@ class GetJsonManagerVolleyImpl: GetJsonManager {
     fun requestQueue(): RequestQueue {
         if (requestQueue == null ) {
             // Me creo la cola pasándole como contexto el contexto que me pasan
-            requestQueue = Volley.newRequestQueue(context)
+            requestQueue = Volley.newRequestQueue(weakContext.get())
         }
 
         return requestQueue!!

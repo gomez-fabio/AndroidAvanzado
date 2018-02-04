@@ -28,15 +28,15 @@ class ExampleInstrumentedTest {
 
         val deletedAll = shopEntityDao.deleteAll()
 
-        val shop = ShopEntity(1,99,"tienda 1"," description 1",1.0f,2.0f,"","","","")
+        val shop = ShopEntity(1,99,"tienda 1"," description_en 1",1.0f,2.0f,"","","","")
 
-        val shop2 = ShopEntity(2,100,"tienda 2"," description 2",1.0f,2.0f,"","","","")
+        val shop2 = ShopEntity(2,100,"tienda 2"," description_en 2",1.0f,2.0f,"","","","")
 
         val id = shopEntityDao.insert(shop)
         val id2 = shopEntityDao.insert(shop2)
 
         shopEntityDao.query().forEach{
-            Log.d("Tiendecita", it.name + it.description)
+            Log.d("Tiendecita", it.name + it.description_en)
         }
 
         assertTrue(id>0)

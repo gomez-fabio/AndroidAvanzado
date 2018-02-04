@@ -1,5 +1,8 @@
 package es.fabiogomez.repository.network
 
+import es.fabiogomez.repository.ErrorCompletion
+import es.fabiogomez.repository.SuccessCompletion
+
 interface GetJsonManager {
-    fun execute(url: String)
+    fun execute(url: String, success: SuccessCompletion<String>, error:ErrorCompletion)
 }
