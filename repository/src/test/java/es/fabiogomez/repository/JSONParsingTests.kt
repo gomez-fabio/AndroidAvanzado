@@ -1,5 +1,6 @@
 package es.fabiogomez.repository
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException
 import es.fabiogomez.repository.model.ShopEntity
 import es.fabiogomez.repository.model.ShopsResponseEntity
 import es.fabiogomez.repository.network.json.JsonEntitiesParser
@@ -25,6 +26,28 @@ class JSONParsingTests {
         assertEquals(40.4180563f, shop.latitude, 0.1f)
     }
 
+
+    @Test
+    @Throws(Exception::class)
+    fun given_valid_string_containing_json_with_wrong_latitude_it_parses_correctly() {
+
+        val shopsJson = ReadJsonFile().loadJSONFromAsset("shopWrongLatitude.json")
+
+        assertTrue(shopsJson.isNotEmpty())
+
+        // parsing
+        val parser = JsonEntitiesParser()
+        var shop: ShopEntity
+        try {
+            shop = parser.parse<ShopEntity>(shopsJson)
+        }catch(e:InvalidFormatException){
+            shop = ShopEntity(1, 1, "Parsing Failed", "", 10.0f,11.0f,"", "", "", "")
+        }
+
+        assertNotNull(shop)
+        assertEquals("Parsing Failed",shop.name)
+        assertEquals(10.0f, shop.latitude, 0.1f)
+    }
 
     @Test
     @Throws(Exception::class)
