@@ -10,7 +10,7 @@ import es.fabiogomez.repository.ErrorCompletion
 import es.fabiogomez.repository.SuccessCompletion
 import java.lang.ref.WeakReference
 
-class GetJsonManagerVolleyImpl (context: Context): GetJsonManager {
+internal class GetJsonManagerVolleyImpl (context: Context): GetJsonManager {
 
      var weakContext: WeakReference<Context> = WeakReference(context)     // Referencia débil para evitar leaks de memoria por el ciclo siguiente, dada una actividad que inicia la descarga se produce el siguente grafo
      var requestQueue: RequestQueue? = null                               // Activity (strong)--> Interactor (strong)--> Repository (strong)--> Volley (weak)~~> Activity (el padre)

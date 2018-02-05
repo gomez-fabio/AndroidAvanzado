@@ -10,7 +10,7 @@ import org.junit.runner.RunWith
 
 
 @RunWith(AndroidJUnit4::class)
-class VolleyTest {
+class VolleyTests {
     val appContext = InstrumentationRegistry.getTargetContext()
 
     @Test

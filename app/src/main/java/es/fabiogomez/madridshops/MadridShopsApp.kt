@@ -3,8 +3,9 @@ package es.fabiogomez.madridshops
 import android.support.multidex.MultiDexApplication
 import android.util.Log
 import es.fabiogomez.domain.interactor.ErrorCompletion
-import es.fabiogomez.domain.interactor.getallshops.GetAllShopsInteractorFakeImpl
 import es.fabiogomez.domain.interactor.SuccessCompletion
+import es.fabiogomez.domain.interactor.deleteallshops.DeleteAllShopsImpl
+import es.fabiogomez.domain.interactor.getallshops.GetAllShopsInteractorFakeImpl
 import es.fabiogomez.domain.model.Shops
 
 // esta clase es el equivalente al appdelegate de ios
@@ -35,11 +36,16 @@ class MadridShopsApp: MultiDexApplication() {
 
             }
         })
+
+        DeleteAllShopsImpl(this).execute(success = {
+            Log.d("JARLL", "success!")
+        }, error = {
+            Log.d("JARLL", "error deleting!")
+        })
     }
 
     override fun onLowMemory() {
         super.onLowMemory()
     }
-
 
 }

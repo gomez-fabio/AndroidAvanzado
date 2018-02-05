@@ -6,11 +6,11 @@ import android.database.sqlite.SQLiteOpenHelper
 
 
 
-fun build(context: Context, name: String, version: Int) : DBHelper {
+internal fun build(context: Context, name: String, version: Int) : DBHelper {
     return DBHelper(context, name, null, version)
 }
 
-class DBHelper(context: Context?, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int)
+internal class DBHelper(context: Context?, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int)
     : SQLiteOpenHelper(context, name, factory, version) {
 
     override fun onOpen(db: SQLiteDatabase?) {
@@ -33,14 +33,14 @@ class DBHelper(context: Context?, name: String?, factory: SQLiteDatabase.CursorF
 }
 
 // helpers
-fun convert(boolean: Boolean): Int {
+internal fun convert(boolean: Boolean): Int {
     if (boolean) {
         return 1
     }
     return 0
 }
 
-fun convert(int: Int): Boolean {
+internal fun convert(int: Int): Boolean {
     if (int == 0){
         return false
     }
