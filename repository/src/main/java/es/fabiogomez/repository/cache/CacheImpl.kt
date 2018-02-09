@@ -23,7 +23,7 @@ internal class CacheImpl(context:Context): Cache{
                 if (shops.count() > 0) {
                     success(shops)
                 } else {
-                    error("Infernal error getting shops")
+                    error("💩 Infernal error getting shops")
                 }
             })
         }).run()
@@ -38,7 +38,7 @@ internal class CacheImpl(context:Context): Cache{
                 })
             } catch (e: Exception) {
                 DispatchOnMainThread(Runnable {
-                    error("Infernal error saving shops")
+                    error("💩 Infernal error saving shops")
                 })
             }
         }).run()
@@ -54,7 +54,7 @@ internal class CacheImpl(context:Context): Cache{
                 if (successDeleting) {
                     success()
                 } else {
-                    error("Infernal error deleting")
+                    error("💩 Infernal error deleting")
                 }
             })
         }).run()

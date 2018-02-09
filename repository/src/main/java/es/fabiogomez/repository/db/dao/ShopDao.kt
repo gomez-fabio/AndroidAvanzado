@@ -17,7 +17,13 @@ internal class ShopDao (val dbHelper: DBHelper) : DAOPersistable<ShopEntity>
     override fun insert(element: ShopEntity): Long {
         var id: Long = 0 // Valor por defecto es -1 que es un error
 
-        id = dbReadWriteConnection.insert(DBConstants.TABLE_SHOP, null,contentValues(element))
+        dbReadWriteConnection.beginTransaction()
+        try {
+            id = dbReadWriteConnection.insert(DBConstants.TABLE_SHOP, null,contentValues(element))
+        } finally {
+            dbReadWriteConnection.endTransaction()
+            dbReadWriteConnection.close()
+        }
 
         return  id
     }
@@ -46,18 +52,34 @@ internal class ShopDao (val dbHelper: DBHelper) : DAOPersistable<ShopEntity>
     }
 
     override fun delete(id: Long): Long {
-        return dbReadWriteConnection.delete(
-                                            DBConstants.TABLE_SHOP,
-                                DBConstants.KEY_SHOP_DATABASE_ID + " = ?",
-                                            arrayOf(id.toString())).toLong()
+
+        dbReadWriteConnection.beginTransaction()
+
+        try {
+            return dbReadWriteConnection.delete(
+                    DBConstants.TABLE_SHOP,
+                    DBConstants.KEY_SHOP_DATABASE_ID + " = ?",
+                    arrayOf(id.toString())).toLong()
+        } finally {
+            dbReadWriteConnection.endTransaction()
+            dbReadWriteConnection.close()
+        }
+
     }
 
     override fun deleteAll(): Boolean {
-        return dbReadWriteConnection.delete(
-                                            DBConstants.TABLE_SHOP,
-                                null,
-                                  null
-                                        ).toLong() >= 0
+        dbReadWriteConnection.beginTransaction()
+        try {
+            return dbReadWriteConnection.delete(
+                    DBConstants.TABLE_SHOP,
+                    null,
+                    null
+            ).toLong() >= 0
+        } finally {
+            dbReadWriteConnection.endTransaction()
+            dbReadWriteConnection.close()
+        }
+
     }
 
     override fun query(id: Long): ShopEntity {
@@ -85,7 +107,7 @@ internal class ShopDao (val dbHelper: DBHelper) : DAOPersistable<ShopEntity>
             val shopEntity = entityFromCursor(cursor)
             queryResult.add(shopEntity!!)
         }
-
+        dbReadOnlyConnection.close()
         return queryResult
     }
 
@@ -98,17 +120,25 @@ internal class ShopDao (val dbHelper: DBHelper) : DAOPersistable<ShopEntity>
                                                             "",
                                                              "",
                                                 DBConstants.KEY_SHOP_DATABASE_ID)
-
+        dbReadOnlyConnection.close()
         return cursor
     }
 
     override fun update(id: Long, element: ShopEntity): Long {
-        val numberOfRecordsUpdated= dbReadWriteConnection.update(
-                                                                DBConstants.TABLE_SHOP,
-                                                                contentValues(element),
-                                                    DBConstants.KEY_SHOP_DATABASE_ID + " =? ",
-                                                                arrayOf(id.toString()))
-        return numberOfRecordsUpdated.toLong()
+
+        try {
+            val numberOfRecordsUpdated= dbReadWriteConnection.update(
+                    DBConstants.TABLE_SHOP,
+                    contentValues(element),
+                    DBConstants.KEY_SHOP_DATABASE_ID + " =? ",
+                    arrayOf(id.toString()))
+
+            return numberOfRecordsUpdated.toLong()
+        } finally {
+            dbReadWriteConnection.endTransaction()
+            dbReadWriteConnection.close()
+        }
+
     }
 
     fun entityFromCursor (cursor: Cursor): ShopEntity? {

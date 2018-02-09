@@ -1,6 +1,7 @@
 package es.fabiogomez.repository
 
 import android.content.Context
+import android.util.Log
 import com.fasterxml.jackson.databind.exc.InvalidFormatException
 import es.fabiogomez.repository.cache.Cache
 import es.fabiogomez.repository.cache.CacheImpl
@@ -22,10 +23,12 @@ class RepositoryImpl(context: Context): Repository {
         cache.getAllShops(
             success = {
                 // if there's shops in cache then return them
+                Log.d("JURJUR","getAllShops success")
                 success(it)
             },
             error= {
                 // if no shops in cache the go to network, perform request and store results in cache
+                Log.d("JURJUR","getAllShops error, populating")
                 populateCache(success, error)
             })
     }
